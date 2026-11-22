@@ -1,0 +1,27 @@
+
+[
+    {
+        "id": 0,
+        "variedad": "Margarita",
+        "precio": 16000,
+        "tacc": "Tiene TACC"
+    },
+    {
+        "id": 1,
+        "variedad": "Especial",
+        "precio": 20000,
+        "tacc": "Sin TACC"
+    },
+    {
+        "id": 2,
+        "variedad": "Hawaiana",
+        "precio": 22000,
+        "tacc": "Sin TACC"
+    },
+    {
+        "id": 3,
+        "variedad": "Napolitana",
+        "precio": 21000,
+        "tacc": "Tiene TACC"
+    }
+]
