@@ -4,11 +4,6 @@
    PRE-ENTREGA 10: API, FETCH Y LIBRERÍAS
 ============================================ */
 
-
-/* ============================================
-   CLASE PIZZA
-============================================ */
-
 class Pizza {
 
     constructor(id, variedad, precio, tacc) {
@@ -21,15 +16,12 @@ class Pizza {
 }
 
 
-/* ============================================
-   VARIABLES Y ARRAY DE PIZZAS
-============================================ */
+
 
 // El menú se completará con los datos del JSON
 let pizzas = [];
 
 
-// Función para guardar el array actualizado
 function guardarPizzas() {
 
     localStorage.setItem("pizzas", JSON.stringify(pizzas));
@@ -37,9 +29,7 @@ function guardarPizzas() {
 }
 
 
-/* ============================================
-   SELECCIONAR ELEMENTOS DEL DOM
-============================================ */
+
 
 const formulario = document.querySelector("#form-pizza");
 
@@ -63,9 +53,7 @@ const imagenGatito = document.querySelector("#imagen-gatito");
 const estadoGatito = document.querySelector("#estado-gatito");
 
 
-/* ============================================
-   NOTIFICACIONES CON TOASTIFY
-============================================ */
+
 
 function notificar(texto, color = "#e58b45") {
 
@@ -86,10 +74,6 @@ function notificar(texto, color = "#e58b45") {
 }
 
 
-/* ============================================
-   CREAR BOTÓN PARA VACIAR EL MENÚ
-============================================ */
-
 const btnVaciar = document.createElement("button");
 
 btnVaciar.textContent = "Vaciar menú";
@@ -98,15 +82,13 @@ btnVaciar.id = "btn-vaciar";
 contenedorPizzas.insertAdjacentElement("afterend", btnVaciar);
 
 
-/* ============================================
-   RENDERIZAR LAS PIZZAS EN PANTALLA
-============================================ */
+
 
 function renderizarPizzas(listaPizzas) {
 
     contenedorPizzas.innerHTML = "";
 
-    // Operador ternario para mostrar un mensaje
+    
     contenedorPizzas.innerHTML = listaPizzas.length === 0
         ? `<p class="sin-resultados">No encontramos pizzas disponibles.</p>`
         : "";
@@ -115,7 +97,6 @@ function renderizarPizzas(listaPizzas) {
 
     listaPizzas.forEach((pizza) => {
 
-        // DESTRUCTURING: extraemos las propiedades
         const { id, variedad, precio, tacc } = pizza;
 
         contenedorPizzas.innerHTML += `
@@ -143,46 +124,42 @@ function renderizarPizzas(listaPizzas) {
 }
 
 
-/* ============================================
-   FETCH + ASYNC/AWAIT
-   CARGAR MENÚ DESDE DATA.JSON
-============================================ */
+
 
 async function cargarMenu() {
 
     try {
 
-        // Deshabilitamos el botón durante la carga
+       
         btnCargarMenu.disabled = true;
 
         estadoCarga.textContent = "Cargando menú...";
 
-        // Solicitamos los datos del archivo JSON
         const respuesta = await fetch("./data.json");
 
-        // Verificamos que la respuesta sea correcta
+        
         if (!respuesta.ok) {
             throw new Error("No se pudo cargar el menú.");
         }
 
-        // Convertimos la respuesta a formato JSON
+        
         const datos = await respuesta.json();
 
-        // Consultamos si existen pizzas guardadas
+      
         const pizzasGuardadas = localStorage.getItem("pizzas");
 
         if (pizzasGuardadas !== null) {
 
             try {
 
-                // Recuperamos los datos guardados
+            
                 const datosGuardados = JSON.parse(pizzasGuardadas);
 
                 if (!Array.isArray(datosGuardados)) {
                     throw new Error("Los datos guardados no son válidos.");
                 }
 
-                // Reconstruimos las instancias de Pizza
+                
                 pizzas = datosGuardados.map((pizza) =>
                     new Pizza(
                         pizza.id,
@@ -196,8 +173,7 @@ async function cargarMenu() {
 
                 console.error("Error al recuperar localStorage:", error);
 
-                // Si los datos guardados están dañados,
-                // recuperamos el menú original del JSON
+           
                 pizzas = datos.map((pizza) =>
                     new Pizza(
                         pizza.id,
@@ -213,7 +189,7 @@ async function cargarMenu() {
 
         } else {
 
-            // Primera visita: cargamos las pizzas del JSON
+
             pizzas = datos.map((pizza) =>
                 new Pizza(
                     pizza.id,
@@ -227,7 +203,6 @@ async function cargarMenu() {
 
         }
 
-        // Renderizamos el menú en el DOM
         renderizarPizzas(pizzas);
 
         estadoCarga.textContent =
@@ -249,7 +224,7 @@ async function cargarMenu() {
 
     } finally {
 
-        // Habilitamos nuevamente el botón
+
         btnCargarMenu.disabled = false;
 
     }
@@ -257,16 +232,10 @@ async function cargarMenu() {
 }
 
 
-/* ============================================
-   MOSTRAR EL MENÚ AL INICIAR LA PÁGINA
-============================================ */
+
 
 cargarMenu();
 
-
-/* ============================================
-   TEMPORIZADOR: MENSAJE DE BIENVENIDA
-============================================ */
 
 setTimeout(() => {
 
@@ -279,17 +248,10 @@ setTimeout(() => {
 
 }, 3000);
 
-
-/* ============================================
-   CONSULTAR MENÚ ACTUALIZADO
-============================================ */
-
 btnCargarMenu.addEventListener("click", cargarMenu);
 
 
-/* ============================================
-   AGREGAR NUEVAS PIZZAS
-============================================ */
+
 
 formulario.addEventListener("submit", (e) => {
 
@@ -299,7 +261,6 @@ formulario.addEventListener("submit", (e) => {
     const precio = Number(inputPrecio.value);
     const tacc = selectTacc.value;
 
-    // Validación de los datos
     if (
         variedad === "" ||
         !Number.isFinite(precio) ||
@@ -319,7 +280,7 @@ formulario.addEventListener("submit", (e) => {
 
     }
 
-    // Generar un ID nuevo
+
     const nuevoId = pizzas.reduce(
         (max, pizza) => Math.max(max, pizza.id),
         -1
@@ -332,10 +293,9 @@ formulario.addEventListener("submit", (e) => {
         tacc
     );
 
-    // Actualizar el array
+
     pizzas.push(nuevaPizza);
 
-    // Guardar y actualizar el DOM
     guardarPizzas();
 
     renderizarPizzas(pizzas);
@@ -350,9 +310,7 @@ formulario.addEventListener("submit", (e) => {
 });
 
 
-/* ============================================
-   BUSCADOR DE PIZZAS
-============================================ */
+
 
 buscador.addEventListener("input", () => {
 
@@ -367,9 +325,7 @@ buscador.addEventListener("input", () => {
 });
 
 
-/* ============================================
-   FILTRO: MOSTRAR TODAS LAS PIZZAS
-============================================ */
+
 
 btnTodas.addEventListener("click", () => {
 
@@ -383,9 +339,7 @@ btnTodas.addEventListener("click", () => {
 });
 
 
-/* ============================================
-   FILTRO: PIZZAS SIN TACC
-============================================ */
+
 
 btnSinTacc.addEventListener("click", () => {
 
@@ -403,13 +357,11 @@ btnSinTacc.addEventListener("click", () => {
 });
 
 
-/* ============================================
-   ELIMINAR Y MODIFICAR PIZZAS
-============================================ */
+
 
 contenedorPizzas.addEventListener("click", (e) => {
 
-    // ELIMINAR UNA PIZZA
+
 
     if (e.target.classList.contains("btn-eliminar")) {
 
@@ -431,7 +383,7 @@ contenedorPizzas.addEventListener("click", (e) => {
     }
 
 
-    // MODIFICAR UNA PIZZA
+
 
     if (e.target.classList.contains("btn-modificar")) {
 
@@ -444,7 +396,7 @@ contenedorPizzas.addEventListener("click", (e) => {
         // Operador ?. para comprobar que la pizza exista
         if (!pizza) return;
 
-        // DESTRUCTURING
+
         const { variedad, precio, tacc } = pizza;
 
         const nuevaVariedad = prompt(
@@ -468,7 +420,7 @@ contenedorPizzas.addEventListener("click", (e) => {
 
         if (nuevoTacc === null) return;
 
-        // Validar los nuevos datos
+
         if (
             nuevaVariedad.trim() === "" ||
             !Number.isFinite(Number(nuevoPrecio)) ||
@@ -488,7 +440,6 @@ contenedorPizzas.addEventListener("click", (e) => {
 
         }
 
-        // Modificar las propiedades del objeto
         pizza.variedad = nuevaVariedad.trim().toLowerCase();
         pizza.precio = Number(nuevoPrecio);
         pizza.tacc = nuevoTacc;
@@ -507,9 +458,6 @@ contenedorPizzas.addEventListener("click", (e) => {
 });
 
 
-/* ============================================
-   VACIAR TODO EL MENÚ
-============================================ */
 
 btnVaciar.addEventListener("click", () => {
 
@@ -535,10 +483,7 @@ btnVaciar.addEventListener("click", () => {
 });
 
 
-/* ============================================
-   FETCH + ASYNC/AWAIT
-   CARGAR GATITO ALEATORIO DESDE CATAAS
-============================================ */
+
 
 async function cargarGatito() {
 
@@ -547,23 +492,19 @@ async function cargarGatito() {
 
     try {
 
-        // Solicitamos una imagen aleatoria
+
         const respuesta = await fetch("https://cataas.com/cat");
 
-        // Verificamos la respuesta
         if (!respuesta.ok) {
             throw new Error("No se pudo obtener la imagen.");
         }
 
-        // Convertimos la respuesta en una imagen
         const imagen = await respuesta.blob();
 
-        // Liberamos la URL anterior si existe
         if (imagenGatito.dataset.urlAnterior) {
             URL.revokeObjectURL(imagenGatito.dataset.urlAnterior);
         }
 
-        // Creamos una URL para mostrar la imagen
         const urlImagen = URL.createObjectURL(imagen);
 
         imagenGatito.src = urlImagen;
@@ -595,9 +536,5 @@ async function cargarGatito() {
 
 }
 
-
-/* ============================================
-   CARGAR EL GATITO AL INICIAR LA PÁGINA
-============================================ */
 
 cargarGatito();
